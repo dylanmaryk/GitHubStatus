@@ -12,17 +12,27 @@ import Combine
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    private var statusItem: NSStatusItem?
-    private var cancellable: AnyCancellable?
+    private var timerCancellable: AnyCancellable?
+    private var sessionCancellable: AnyCancellable?
     private var statusUrl: URL?
     
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        self.statusItem?.button?.image = NSImage(named: "octoface")
-        
+    private let statusItem: NSStatusItem = {
+        let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        statusItem.button?.image = NSImage(named: "octoface")
+        return statusItem
+    }()
+    
+    private let statusMenuItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
+    
+    private let session: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        return URLSession(configuration: config)
+    }()
+    
+    func applicationDidFinishLaunching(_ notification: Notification) {
         let menu = NSMenu()
-        let statusMenuItem = NSMenuItem(title: "Getting status...", action: nil, keyEquivalent: "")
-        menu.addItem(statusMenuItem)
+        menu.addItem(self.statusMenuItem)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Refresh", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Launch at Login", action: nil, keyEquivalent: ""))
@@ -36,30 +46,52 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 keyEquivalent: ""))
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: nil, keyEquivalent: ""))
-        self.statusItem?.menu = menu
+        self.statusItem.menu = menu
         
-        self.cancellable = URLSession.shared
+        self.timerCancellable = Timer.publish(every: 300, on: RunLoop.main, in: .common)
+            .autoconnect()
+            .sink { [unowned self] _ in
+                self.retrieveStatus()
+            }
+        
+        self.retrieveStatus()
+    }
+    
+    private func retrieveStatus() {
+        self.statusMenuItem.title = "Getting status..."
+        self.statusMenuItem.action = nil
+        self.statusMenuItem.isEnabled = false
+        self.sessionCancellable?.cancel()
+        self.sessionCancellable = self.session
             .dataTaskPublisher(for: URL(string: "https://kctbh9vrtdwd.statuspage.io/api/v2/status.json")!)
             .map { $0.data }
             .decode(type: StatusResponse.self, decoder: JSONDecoder())
-            .sink(receiveCompletion: { completion in
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [unowned self] completion in
                 switch completion {
                 case .finished:
                     break
                 case .failure(let error):
-                    statusMenuItem.title = error.localizedDescription
-                    statusMenuItem.action = nil
+                    self.setStatusItemColor(nil)
+                    
+                    self.statusMenuItem.title = error.localizedDescription
+                    self.statusMenuItem.action = nil
+                    self.statusMenuItem.isEnabled = false
                 }
             }, receiveValue: { [unowned self] statusResponse in
-                DispatchQueue.main.async {
-                    self.statusItem?.button?.image =
-                        self.statusItem?.button?.image?
-                            .tinted(with: self.statusItemColor(for: statusResponse.status.indicator))
-                }
+                let statusItemColor = self.statusItemColor(for: statusResponse.status.indicator)
+                self.setStatusItemColor(statusItemColor)
+                
                 self.statusUrl = statusResponse.page.url
-                statusMenuItem.title = statusResponse.status.description
-                statusMenuItem.action = #selector(self.openStatusUrl(_:))
+                
+                self.statusMenuItem.title = statusResponse.status.description
+                self.statusMenuItem.action = #selector(self.openStatusUrl(_:))
+                self.statusMenuItem.isEnabled = true
             })
+    }
+    
+    private func setStatusItemColor(_ color: NSColor?) {
+        self.statusItem.button?.image = self.statusItem.button?.image?.tinted(with: color)
     }
     
     @objc private func openStatusUrl(_ sender: AnyObject?) {
