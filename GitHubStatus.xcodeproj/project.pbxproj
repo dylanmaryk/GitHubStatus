@@ -8,21 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		3531410E245487E40037FBFD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3531410D245487E40037FBFD /* AppDelegate.swift */; };
-		35314110245487E40037FBFD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3531410F245487E40037FBFD /* ContentView.swift */; };
 		35314112245487E70037FBFD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35314111245487E70037FBFD /* Assets.xcassets */; };
 		35314115245487E70037FBFD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35314114245487E70037FBFD /* Preview Assets.xcassets */; };
 		35314118245487E70037FBFD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35314116245487E70037FBFD /* Main.storyboard */; };
+		35AD924124549A40007C18C8 /* StatusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AD924024549A40007C18C8 /* StatusResponse.swift */; };
+		35AD92482454C223007C18C8 /* NSImage+TintColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AD92472454C223007C18C8 /* NSImage+TintColor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3531410A245487E40037FBFD /* GitHubStatus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubStatus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3531410D245487E40037FBFD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3531410F245487E40037FBFD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		35314111245487E70037FBFD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35314114245487E70037FBFD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		35314117245487E70037FBFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		35314119245487E70037FBFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3531411A245487E70037FBFD /* GitHubStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GitHubStatus.entitlements; sourceTree = "<group>"; };
+		35AD924024549A40007C18C8 /* StatusResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusResponse.swift; sourceTree = "<group>"; };
+		35AD92472454C223007C18C8 /* NSImage+TintColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+TintColor.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,12 +58,13 @@
 			isa = PBXGroup;
 			children = (
 				3531410D245487E40037FBFD /* AppDelegate.swift */,
-				3531410F245487E40037FBFD /* ContentView.swift */,
 				35314111245487E70037FBFD /* Assets.xcassets */,
-				35314116245487E70037FBFD /* Main.storyboard */,
-				35314119245487E70037FBFD /* Info.plist */,
 				3531411A245487E70037FBFD /* GitHubStatus.entitlements */,
+				35314119245487E70037FBFD /* Info.plist */,
+				35314116245487E70037FBFD /* Main.storyboard */,
+				35AD92472454C223007C18C8 /* NSImage+TintColor.swift */,
 				35314113245487E70037FBFD /* Preview Content */,
+				35AD924024549A40007C18C8 /* StatusResponse.swift */,
 			);
 			path = GitHubStatus;
 			sourceTree = "<group>";
@@ -102,7 +105,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 1140;
-				ORGANIZATIONNAME = dylanmaryk;
+				ORGANIZATIONNAME = "Dylan Maryk";
 				TargetAttributes = {
 					35314109245487E40037FBFD = {
 						CreatedOnToolsVersion = 11.4;
@@ -145,7 +148,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35314110245487E40037FBFD /* ContentView.swift in Sources */,
+				35AD924124549A40007C18C8 /* StatusResponse.swift in Sources */,
+				35AD92482454C223007C18C8 /* NSImage+TintColor.swift in Sources */,
 				3531410E245487E40037FBFD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
