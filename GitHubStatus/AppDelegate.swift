@@ -9,6 +9,7 @@
 import Cocoa
 import Combine
 import LaunchAtLogin
+import Sparkle
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -44,7 +45,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 keyEquivalent: ""))
         menu.addItem(self.launchAtLoginMenuItem)
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Check for Updates", action: nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Check for Updates",
+                                action: #selector(self.checkForUpdates(_:)),
+                                keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "GitHub Repo",
                                 action: #selector(self.openRepoUrl(_:)),
                                 keyEquivalent: ""))
@@ -113,13 +116,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.openUrl(self.statusUrl)
     }
     
+    @objc private func refresh(_ sender: AnyObject?) {
+        self.retrieveStatus()
+    }
+    
     @objc private func toggleLaunchAtLogin(_ sender: AnyObject?) {
         LaunchAtLogin.isEnabled.toggle()
         self.setLaunchAtLoginMenuItemState()
     }
     
-    @objc private func refresh(_ sender: AnyObject?) {
-        self.retrieveStatus()
+    @objc private func checkForUpdates(_ sender: AnyObject?) {
+        SUUpdater.shared()?.checkForUpdates(sender)
     }
     
     @objc private func openRepoUrl(_ sender: AnyObject?) {
