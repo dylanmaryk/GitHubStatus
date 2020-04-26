@@ -37,6 +37,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }()
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        self.createMenu()
+        self.createTimer()
+        self.retrieveStatus()
+        self.setLaunchAtLoginMenuItemState()
+    }
+    
+    private func createMenu() {
         let menu = NSMenu()
         menu.addItem(self.statusMenuItem)
         menu.addItem(.separator())
@@ -59,16 +66,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 action: #selector(self.quit(_:)),
                                 keyEquivalent: "q"))
         self.statusItem.menu = menu
-        
+    }
+    
+    private func createTimer() {
         self.timerCancellable = Timer.publish(every: 300, on: RunLoop.main, in: .common)
             .autoconnect()
             .sink { [unowned self] _ in
                 self.retrieveStatus()
             }
-        
-        self.retrieveStatus()
-        
-        self.setLaunchAtLoginMenuItemState()
     }
     
     private func retrieveStatus() {
