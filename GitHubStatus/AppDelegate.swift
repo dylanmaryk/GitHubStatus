@@ -50,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 action: #selector(self.openAttributionUrl(_:)),
                                 keyEquivalent: ""))
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Quit", action: nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Quit", action: #selector(self.quit(_:)), keyEquivalent: "q"))
         self.statusItem.menu = menu
         
         self.timerCancellable = Timer.publish(every: 300, on: RunLoop.main, in: .common)
@@ -120,6 +120,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc private func openAttributionUrl(_ sender: AnyObject?) {
         self.openUrl(URL(string: "https://github.com/primer/octicons/blob/master/LICENSE")!)
+    }
+    
+    @objc private func quit(_ sender: AnyObject?) {
+        NSApp.terminate(sender)
     }
     
     private func openUrl(_ url: URL?) {
