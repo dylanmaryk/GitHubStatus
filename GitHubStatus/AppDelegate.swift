@@ -39,7 +39,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(self.statusMenuItem)
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Refresh", action: nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Refresh",
+                                action: #selector(self.refresh(_:)),
+                                keyEquivalent: ""))
         menu.addItem(self.launchAtLoginMenuItem)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Check for Updates", action: nil, keyEquivalent: ""))
@@ -50,7 +52,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 action: #selector(self.openAttributionUrl(_:)),
                                 keyEquivalent: ""))
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(self.quit(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Quit",
+                                action: #selector(self.quit(_:)),
+                                keyEquivalent: "q"))
         self.statusItem.menu = menu
         
         self.timerCancellable = Timer.publish(every: 300, on: RunLoop.main, in: .common)
@@ -112,6 +116,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func toggleLaunchAtLogin(_ sender: AnyObject?) {
         LaunchAtLogin.isEnabled.toggle()
         self.setLaunchAtLoginMenuItemState()
+    }
+    
+    @objc private func refresh(_ sender: AnyObject?) {
+        self.retrieveStatus()
     }
     
     @objc private func openRepoUrl(_ sender: AnyObject?) {
