@@ -8,6 +8,7 @@
 
 import Cocoa
 import Combine
+import LaunchAtLogin
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -24,6 +25,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private let statusMenuItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
     
+    private lazy var launchAtLoginMenuItem = NSMenuItem(title: "Launch at Login",
+                                                        action: #selector(self.toggleLaunchAtLogin(_:)),
+                                                        keyEquivalent: "")
+    
     private let session: URLSession = {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
@@ -35,7 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(self.statusMenuItem)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Refresh", action: nil, keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Launch at Login", action: nil, keyEquivalent: ""))
+        menu.addItem(self.launchAtLoginMenuItem)
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "Check for Updates", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "GitHub Repo",
@@ -55,6 +60,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         
         self.retrieveStatus()
+        
+        self.setLaunchAtLoginMenuItemState()
     }
     
     private func retrieveStatus() {
@@ -90,12 +97,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             })
     }
     
+    private func setLaunchAtLoginMenuItemState() {
+        self.launchAtLoginMenuItem.state = LaunchAtLogin.isEnabled ? .on : .off
+    }
+    
     private func setStatusItemColor(_ color: NSColor?) {
         self.statusItem.button?.image = self.statusItem.button?.image?.tinted(with: color)
     }
     
     @objc private func openStatusUrl(_ sender: AnyObject?) {
         self.openUrl(self.statusUrl)
+    }
+    
+    @objc private func toggleLaunchAtLogin(_ sender: AnyObject?) {
+        LaunchAtLogin.isEnabled.toggle()
+        self.setLaunchAtLoginMenuItemState()
     }
     
     @objc private func openRepoUrl(_ sender: AnyObject?) {
