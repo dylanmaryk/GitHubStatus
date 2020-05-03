@@ -69,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func createTimer() {
-        self.timerCancellable = Timer.publish(every: 300, on: RunLoop.main, in: .common)
+        self.timerCancellable = Timer.publish(every: 300, on: .main, in: .common)
             .autoconnect()
             .sink { [unowned self] _ in
                 self.retrieveStatus()
